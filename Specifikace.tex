@@ -10,12 +10,9 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{stackrel}
+\usepackage{graphicx}
 
-\theoremstyle{definition}
-\newtheorem{definition}{Definice}
-
-\theoremstyle{plain}
-\newtheorem{sentence}{Věta}
+\graphicspath{{./img/}}
 
 
 
@@ -54,23 +51,48 @@
 	\section*{\large{Požadavky uživatele}} 
 	\vspace*{-0.2cm}
 	\begin{itemize}
-		\item Větší přehlednost a jednoduchost použití
+		\item Přehlednost
 		\vspace{-0.2cm}
-		\item Méně funkcí, zanechat pouze ty potřebné
+		\item Jednoduchost použití
 		\vspace{-0.2cm}
-		\item Možnost změny barevného scématu a pozadí
+		\item Není zapotřebí převeliké množství funkcí
+		\vspace{-0.2cm}
+		\item Možnost změny barevného scématu a~pozadí
+		\vspace{-0.2cm}
+		\item Rychlá editace položek
 	\end{itemize}
 
 	\section*{\large{Způsob používání současné aplikace}}
-	
 	\vspace*{-0.2cm}
+	Momentální aplikace je založena na třídění všech nových i~již vytvořených úloh do skupin podle různých kondicí, převážně pak tedy místa jejich vykonání, 
+	čili např. na poznámky vytvořené pro školu, práci, na doma, volný čas a~tak dále. Postrádá možnost zobrazit je všechny chronologicky za sebou a~tím
+	zbytečně vytváří zmatek, což jde proti jejímu účelu. Ihned po prvotním spuštění aplikace na uživatele vyskočí několikakrokový tutoriál na vytvoření nové
+	úlohy, načež je uživatel stejně zmaten co to vlastně vytvořil a~proč, a~poté navíc zjistí že jej čeká ještě zkouknout dalších 10 tutoriálů. Odhaduji, že 
+	právě v~tenhle moment by to obvyklý uživatel vzdal a~aplikaci zavřel, čemuž napovídá i~nepěkné hodnocení aplikace.
+
 
 	\section*{\large{Identifikované potíže}}
 	\vspace*{-0.2cm}
+	\begin{itemize}
+		\item Aplikace má zbytečně příliš mnoho funkcí, což ji dělá nepřehlednou a~komplikovanou
+		\vspace{-0.2cm}
+		\item Pouze dvě barevná schémata, skoro žádné možnosti kustomizace
+		\vspace{-0.2cm}
+		\item Zákazník očekává jednoduché řešení jednoduchého problému, ale čeká na něj složité monstrum
+	\end{itemize}
 
-	\section*{\large{Vlastní návrh nového řešení}}
+	\section*{\large{\centering Vlastní návrh nového řešení}}
 	\vspace*{-0.2cm}
-
+	Aplikace má v hlavním panelu nástrojů pouze tři hlavní funkce, a~to konkrétně funkci pro vytvoření úlohy, zobrazení kalendáře s podrobnostmi k úlohám 
+	v~následujících dnech a~také možnost grafického přepnutí mezi více režimy zobrazení úloh, přesně v tomto pořadí. Vytvořené úlohy obsahují v~hlavním 
+	menu pouze jejich jméno a~čas konání, přičemž je možná každou úlohu rozkliknout, což otevře textový editor v~němž je možné i~doplnit přiblíženější 
+	specifikaci k~dané ploze. V~pravém rohu položky je také tlačítko, které po rozkliknutí otevře jednoduché drop-down menu s možnostmi přejmenování 
+	položky, nastavení upomínky a~nebo odstranění položky. V~pravém horním rohu menu je tlačítko jejž rozkliknutí otevře Nastavení, kde je dále 
+	umožněno například měnit barevné schéma aplikace výběrem z~RGB palety, změnit používaný jazyk, nastavení zvuku apod.
+	\vspace*{-0.1cm}
+	\begin{center}
+	\includegraphics[width=0.34\textwidth]{timeplanner}
+	\end{center}
 
 	\newpage
 
