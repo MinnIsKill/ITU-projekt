@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>student:{{ i.id }}</title>
+{% endblock %}
+
+{% block body %}
+<br>
+<form action="/studentPage/{{ i.id }}" method="POST">
+    <label for="fname">First name:</label>
+    <input type="text" id="name" name="name" value="{{ i.name }}"><br><br>
+    <label for="surname">Last name:</label>
+    <input type="text" id="surname" name="surname" value="{{ i.surname }}"><br><br>
+    <input type="submit" value="Ulozit">
+</form> 
+    <button onclick="window.location.href='/search'">back on search</button> 
+{% endblock %}
+
