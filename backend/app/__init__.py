@@ -20,4 +20,8 @@ class Person(db.Model):
     def __repr__(self):
         return("id:[{}]-date_of_creatin:|{}| name:\"{}\" surname:\"{}\"".format(self.id,self.date_of_creatin,name,surname))
 
+    def serialize(self):
+        return{"ID":str(self.id),"NAME":self.name,"SURNAME":self.surname}
+
+
 from app import views

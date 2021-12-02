@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect 
+from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 from app import app
@@ -25,6 +26,11 @@ def search():
 @app.route("/",methods=["GET","POST"])
 def index():
         return render_template("index.html")
+
+@app.route("/sTab",methods=["POST","GET"])
+def sTab():
+    students = Person.query.order_by(Person.name).all()
+    return render_template("stable.html")
 
 @app.route("/getStudent/<student_id>",methods=["GET","POST"])
 def getStudent(student_id):
@@ -53,3 +59,11 @@ def studentPage(student_id):
         except:
             return "DATABASE EROR"
 
+
+@app.route("/dumpStudents",methods=["GET","POST"])
+def dumpStudents():
+    try:
+        persons = [x.serialize() for x in Person.query.order_by(Person.id).all() ]
+        return jsonify({'students': persons})
+    except:
+        return "DATABASE EROR"
