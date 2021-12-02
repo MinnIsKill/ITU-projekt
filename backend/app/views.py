@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect 
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS, cross_origin
 
 from app import app
 from app import db
@@ -61,6 +62,7 @@ def studentPage(student_id):
 
 
 @app.route("/dumpStudents",methods=["GET","POST"])
+@cross_origin()
 def dumpStudents():
     try:
         persons = [x.serialize() for x in Person.query.order_by(Person.id).all() ]
