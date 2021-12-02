@@ -14,7 +14,7 @@
     <body>
         <div class="topnav" id="TopNav">
             {% for k,v in {"/":"Home","/search":"Hledej", "/sTab":"tabulka"}.items() %}
-            <a href="{{ k }}" {% if k == url_for(request.endpoint)  %} class = "active" {% endif %} >{{ v  }}</a>
+            <a href="{{ k }}" {% if k == url_for(request.endpoint)  %} class = "active" {% endif %} >{{ v }}</a>
             {% endfor %}
         </div>
        

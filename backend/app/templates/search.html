@@ -30,7 +30,7 @@
                 <td>{{ i.id }}</td>
                 <td>{{ i.name }}</td>
                 <td>{{ i.surname }}</td>
-                <td><button onclick="window.location.href='/studentPage/{{ i.id }}'">upravit</button></td>
+                <td><button onclick="window.open('/studentPage/{{ i.id }}')">upravit</button></td>
             </tr>
             {% endfor %}
 {% endblock %}

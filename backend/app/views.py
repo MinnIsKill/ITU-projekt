@@ -56,6 +56,7 @@ def studentPage(student_id):
     else:
         try:
             person = Person.query.order_by(Person.id).filter_by(id = student_id).first()
+            print(person.serialize())
             return render_template("user_info.html", i = person)
         except:
             return "DATABASE EROR"
