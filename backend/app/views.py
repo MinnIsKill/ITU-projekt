@@ -7,22 +7,30 @@ from app import app
 from app import db
 from app import Person
 
-@app.route("/search",methods=["POST","GET"])
-def search():
+@app.route("/addTab",methods=["POST","GET"])
+def addTable():
     if request.method == "POST":
         name = request.form["name"]
         surname = request.form["surname"]
-        new_person = Person(name = name, surname = surname)
+        instrument = request.form["instrument"]
+        birthdate = request.form["birthdate"]
+        phone = request.form["phone"]
+        phone_parent = request.form["phone_parent"]
+        email = request.form["email"]
+        email_parent = request.form["email_parent"] 
+        new_person = Person(name = name, surname = surname, instrument=instrument,birthdate=birthdate,phone=phone,phone_parent=phone_parent,email=email,email_parent=email_parent)
         try:
+        
             db.session.add(new_person)
             db.session.commit()
-            return(redirect("/search"))
+            
+            return(redirect("/addTab"))
         except:
             return "DATABASE ERROR"
 
     else:
-        offenders = Person.query.order_by(Person.id).all()
-        return render_template("search.html", offenders = offenders)
+        persons = Person.query.order_by(Person.id).all()
+        return render_template("addTab.html", persons = persons)
 
 @app.route("/",methods=["GET","POST"])
 def index():
@@ -66,7 +74,19 @@ def studentPage(student_id):
 @cross_origin()
 def dumpStudents():
     try:
-        persons = [x.serialize() for x in Person.query.order_by(Person.id).all() ]
+        all_persons = Person.query.order_by(Person.id).all()
+        persons = [x.serialize() for x in all_persons ]
         return jsonify({'students': persons})
+    except:
+        return "DATABASE EROR"
+
+@app.route("/deleteStudent/<student_id>",methods=["GET","POST"])
+@cross_origin()
+def studentDelete(student_id):
+    try:
+        person = Person.query.filter_by(id=student_id).first();
+        db.session.delete(person);
+        db.session.commit();
+        return jsonify({"success": True})
     except:
         return "DATABASE EROR"
