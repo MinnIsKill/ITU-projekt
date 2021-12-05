@@ -1,3 +1,6 @@
+/*
+ * Author: Jan Lutonský xluton02
+ */
 import NavBarButton from './Button.js'
 
 function responsive_toggle() {

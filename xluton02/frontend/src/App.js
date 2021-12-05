@@ -1,3 +1,6 @@
+/*
+ * Author: Jan Lutonský xluon02
+ */
 import NavBar from './components/NavBar/main'
 import { Routes , Route } from 'react-router-dom';
 

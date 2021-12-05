@@ -1,3 +1,6 @@
+/*
+ * Author: Jan Lutonský xluton02
+ */
 import {NavLink as LINK} from 'react-router-dom';
 
 function NavBarButton( prop ){

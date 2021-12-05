@@ -1,3 +1,7 @@
+/*
+ * Author: Jan Lutonský xluton02
+ */
+
 import React from "react";
 import { useState, useEffect } from "react";
 
