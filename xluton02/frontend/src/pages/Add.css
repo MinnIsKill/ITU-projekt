@@ -1,0 +1,37 @@
+.Form  input{
+    height: 20px;
+    flex: 0 0 200px;
+    display:table;
+}
+
+.Form label{
+    display: table;
+    text-align: left;
+    width: 400px;
+    line-height: 26px;
+    margin: 10px;
+}
+
+.Form button{
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 140px;
+    background-color: #8fecdb;
+    border-radius: 10px;
+    border-style: solid;
+}
+
+.Form button.refresh{
+    background-color: #ec8fa0;
+}
+
+.Form button:hover{
+    background-color: white;
+}
+
+.Form button.refresh:hover{
+    background-color: white;
+}
+
+
