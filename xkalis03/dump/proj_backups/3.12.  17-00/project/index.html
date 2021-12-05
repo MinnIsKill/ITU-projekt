@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8" />
+      <div id="wrapperHeader">
+         <div id="header">
+            <img src="assets/images/header2.jpg" alt="logo" />
+            <div class="centered">Hudební škola</div>
+         </div> 
+      </div>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="assets/styles.css">
+   </head>
+   
+<!-- =======================================
+               BODY START
+======================================== -->
+<body>
+
+<!-- TOOLBAR -->
+<div class="navbar">
+   <a href="#home">Domů</a>
+   <a href="#studentdatabase">Databáze</a>
+   <div class="dropdown">
+      <button class="dropbtn">Novinky 
+         <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+         <a href="#school">Škola</a>
+         <a href="#events">Akce</a>
+         <a href="#COVID">COVID info</a>
+         <a href="#directive">Vládní nařízení</a>
+         <a href="#importantinfo">Důležité zprávy</a>
+      </div>
+   </div>
+   <div class="dropdown" style="float:right;">
+      <button class="dropbtn">Nastavení
+         <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+         <a href="#">Link 1</a>
+         <a href="#">Link 2</a>
+         <a href="#">Link 3</a>
+      </div>
+   </div>
+
+   <div class="login-container" style="float:right;">
+      <form action="/action_page.php">
+      <input type="text" placeholder="ID" name="username">
+      <input type="text" placeholder="heslo" name="psw">
+      <button type="submit">Přihlásit</button>
+      </form>
+   </div>
+
+<!-- SEARCH BAR -->
+   <div class="search-container">
+      <form action="/action_page.php">
+         <input type="text" id="myInput" onkeyup="hideStudentsSearch()" placeholder="Vyhledej žáka nebo hudební nástroj...">
+      </form>
+   </div>
+<!-- SEARCH BAR -->
+
+</div>
+<!-- TOOLBAR -->
+
+</body>
+<!-- =======================================
+               BODY END
+======================================== -->
+
+<!-- =======================================
+            DATABASE START
+======================================== -->
+<!-- SEARCH BAR TABLE -->
+<id id = #studentdatabase>
+<table id="myAboveTable">
+   <div style="height: 5px;">
+      <tr class="header">
+         <th style="width:5%">ID</th>
+         <th style="width:30%">Jméno</th>
+         <th style="width:30%">Příjmení</th>
+         <th style="width:30%">Hudební nástroj</th>
+      </tr>
+   </div>
+   <div style="overflow-x:auto;">
+      <table id="myTable" class="scrollContent" style="max-height:0px">
+         <span id="content"></span>
+         <script>
+            //python3 run.py
+            fetch("http://localhost:5000/dumpStudents",{method: "GET"})
+               .then(function(resp) {
+                  return resp.json();
+               })
+               .then(function(data){
+                  //console.log(data); //manipuluju dál s 'data'
+                  //console.log(data.students[0]);
+                  //console.log(data.students[0].ID);
+                  //console.log(data.students.length);
+                  PrintJSONIntoTable(data);
+         
+               //tady nacpu for cyklus a narvu je do variable
+                  //data.students[i].ID/NAME/SURNAME, spojovat pluskama
+               })
+   
+            function PrintJSONIntoTable(data) {
+               var results = "<table id=\"myTable\" class=\"scrollContent\">";
+               for (var i = 0; i < data.students.length; i++) {
+                  results+="<tr><td><button id =\"myBtn\" style=\"width: 100%\">"+data.students[i].ID+
+                     "</button></td>"+"<td style=\"width: 30%\">"+data.students[i].NAME+
+                     "</td><td style=\"width: 30%\">"+data.students[i].SURNAME+
+                     "</td><td style=\"width: 30%\">"+data.students[i].SURNAME+
+                     "</td></tr>";
+               }
+               results += "</table>";
+               console.log(results);
+               document.getElementById('content').innerHTML = results;
+            }
+            
+            // Get the modal
+            var modal = document.getElementById("myModal");
+            // Get the button that opens the modal
+            var btn = document.getElementById("myBtn");
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+            // When the user clicks on the button, open the modal
+            btn.onclick = function() {
+               modal.style.display = "block";
+            }
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+               modal.style.display = "none";
+            }
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+               if (event.target == modal) {
+                  modal.style.display = "none";
+               }
+            }
+         </script>
+      </table>
+   </div>
+</table>
+</id>
+<!-- SEARCH BAR TABLE -->
+
+<!-- SEARCH BAR TABLE VIEW HANDLING -->
+<script>
+   function hideStudentsSearch() {
+     // Declare variables
+     var input, filter, table, tr, td, i, txtValue;
+     input = document.getElementById("myInput");
+     filter = input.value.toUpperCase();
+     table = document.getElementById("myTable");
+     tr = table.getElementsByTagName("tr");
+   
+     // Loop through all table rows, and hide those who don't match the search query
+     for (i = 0; i < tr.length; i++) {
+       td = tr[i].getElementsByTagName("td")[0];
+       td2 = tr[i].getElementsByTagName("td")[1];
+       td3 = tr[i].getElementsByTagName("td")[2];
+       td4 = tr[i].getElementsByTagName("td")[3];
+       if (td || td2 || td3 || td4) {
+         txtValue = td.textContent || td.innerText;
+         txtValue2 = td2.textContent || td2.innerText;
+         txtValue3 = td3.textContent || td3.innerText;
+         txtValue4 = td4.textContent || td4.innerText;
+         if ((txtValue.toUpperCase().indexOf(filter) > -1) || (txtValue2.toUpperCase().indexOf(filter) > -1)
+            || (txtValue3.toUpperCase().indexOf(filter) > -1) || (txtValue4.toUpperCase().indexOf(filter) > -1)) {
+           tr[i].style.display = "";
+         } else {
+           tr[i].style.display = "none";
+         }
+       }
+     }
+   }
+   </script>
+<!-- SEARCH BAR TABLE VIEW HANDLING -->
+
+
+<!-- POPUP WINDOW -->
+<!-- Trigger/Open The Modal -->
+<button id="myBtn">Open Modal</button>
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Some text in the Modal..</p>
+  </div>
+</div>
+<!-- POPUP WINDOW -->
+<!-- =======================================
+            DATABASE END
+======================================== -->
+
+
+</html>

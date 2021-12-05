@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hudební škola</title>
+    <!-- Import Styles -->
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <!-- Import Vue.js -->
+    <script src="https://unpkg.com/vue@3.0.11/dist/vue.global.js"></script>
+  </head>
+  <body>
+<!-- TITLE -->
+    <div id="title">
+
+      <h1>{{ title }} </h1> <!-- referring to 'product' in 'const socks' -->
+      <!-- Solution -->
+      <p>{{ subtitle }}</p> <!-- referring to 'description' in 'const socks' -->
+      <!-- Solution -->
+    </div>
+
+    <!-- Import View App -->
+    <script src="./main.js"></script>
+
+    <!-- Mount View App -->
+    <script>
+      const mountedApp = title.mount('#title') //this #title plugs 'const title' from main.js into the <div id> on line 12
+    </script>
+<!-- TITLE -->
+
+<!-- SEARCH BAR -->
+   <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Vyhledej žáka nebo hudební nástroj...">
+   <table id="myTable">
+      <tr class="header">
+      <th style="width:60%;">Jméno</th>
+      <th style="width:40%;">Hudební nástroj</th>
+      </tr>
+      <tr>
+      <td>Biggus</td>
+      <td>kytara</td>
+      </tr>
+      <tr>
+      <td>Dickus</td>
+      <td>klávesy</td>
+      </tr>
+      <tr>
+      <td>Totallus</td>
+      <td>činely</td>
+      </tr>
+      <tr>
+      <td>Maximus</td>
+      <td>bicí</td>
+      </tr>
+   </table>
+    
+    <script>
+      function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+      
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          td2 = tr[i].getElementsByTagName("td")[1];
+          if (td || td2) {
+            txtValue = td.textContent || td.innerText;
+            txtValue2 = td2.textContent || td2.innerText;
+            if ((txtValue.toUpperCase().indexOf(filter) > -1) || (txtValue2.toUpperCase().indexOf(filter) > -1)) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+      </script>
+<!-- SEARCH BAR -->
+   <div id="app"></div>
+<!-- built files will be auto injected -->
+   
+   </div>
+  </body>
+</html>

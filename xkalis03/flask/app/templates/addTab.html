@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Add Tab</title>
+{% endblock %}
+
+{% block body %}
+
+    <h1>Pridani zaku do databaze</h1>
+    <h2>po odstraneni zak chvilku pockej a pak refresh</h2>
+    <div class="content" style="width: 800px; margin: 0 auto; color: #000;"  >
+        <h3>Tabulka studentu</h3>
+        <div class="form">
+            <form action="/addTab" method="POST">
+                Jmeno:
+                <input type="text" name="name" id="name">
+                Prijmeni:
+                <input type="text" name="surname" id="surname"> <br>
+                Nastroj:
+                <input type="text" name="instrument" id="instrument">
+                narozeni:
+                <input type="text" name="birthdate" id="birthdate"><br>
+                mobil:
+                <input type="text" name="phone" id="phone">
+                mobil rodic:
+                <input type="text" name="phone_parent" id="phone_parent"> <br>
+                email:
+                <input type="text" name="email" id="email">
+                email rodic:
+                <input type="text" name="email_parent" id="email_parent"> <br><br>
+                
+                <input type="submit" value="pridat zaka">
+                <br><br>
+            </form>
+        </div>
+        <table>
+            <tr style="margin: 20px;">
+                <th>ID</th>
+                <th>jemno</th>
+                <th>prijmeni</th>
+                <th>nastroj</th>
+                <th>nastroj</th>
+                <th>phone</th>
+                <th>phone rodic</th>
+                <th>email</th>
+                <th>email rodic</th>
+                <th>edit</th>
+                <th>delete</th>
+            </tr>
+            {% for i in persons  %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.name }}</td>
+                <td>{{ i.surname }}</td>
+                <td>{{ i.instrument }}</td>
+                <td>{{ i.birthdate }}</td>
+                <td>{{ i.phone }}</td>
+                <td>{{ i.phone_parent }}</td>
+                <td>{{ i.email }}</td>
+                <td>{{ i.email_parent }}</td>
+                <td><button onclick="window.open('/studentPage/{{ i.id }}')">upravit</button></td>
+                <td><button onclick="del({{ i.id }})">delete</button></td>
+            </tr>
+            {% endfor %}
+            <script>
+                function del(id){
+                    fetch('/deleteStudent/'+id,{method: "GET"})
+                };
+            </script>
+{% endblock %}
+
