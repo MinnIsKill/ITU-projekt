@@ -124,9 +124,9 @@
                //var btnData = "";
                for (var i = 0; i < data.students.length; i++) {
                   results+="<tr><td><button id =\"myBtn["+[i]+"]\" onclick=\"btnClicked("+[i]+")\" style=\"width: 100%\">"+data.students[i].ID+
-                     "</button></td>"+"<td style=\"width: 30%\">"+data.students[i].NAME+
-                     "</td><td style=\"width: 30%\">"+data.students[i].SURNAME+
-                     "</td><td style=\"width: 30%\">"+data.students[i].INSTRUMENT+
+                     "</button></td>"+"<td style=\"width: 30%\">"+data.students[i].Jméno+
+                     "</td><td style=\"width: 30%\">"+data.students[i].Příjmení+
+                     "</td><td style=\"width: 30%\">"+data.students[i].Nástroj+
                      "</td></tr>";
                   //btnData+= data.students[i].NAME+"\n";
                }
@@ -166,16 +166,16 @@
                               datas= "<div class=\"divTable\">"+
                               "<div class=\"divTableBody\">"+
                                  "<div class=\"divTableRow\">"+
-                                    "<div class=\"divTableCell\">"+"<strong>Jméno žáka:</strong> "+data.students[i].NAME+"  "+data.students[i].SURNAME+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Jméno žáka:</strong> "+data.students[i].Jméno+"  "+data.students[i].Příjmení+"</div>"+
                                     "<div class=\"divTableCell\">"+"<strong>ID žáka:</strong> "+data.students[i].ID+"</div>"+
-                                    "<div class=\"divTableCell\">"+"<strong>Datum narození žáka:</strong> "+data.students[i].BIRTHDATE+"</div>"+
-                                    "<div class=\"divTableCell\">"+"<strong>Hudební nástroje:</strong> "+data.students[i].INSTRUMENT+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Datum narození žáka:</strong> "+data.students[i].Narozen+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Hudební nástroje:</strong> "+data.students[i].Nástroj+"</div>"+
                                  "</div>"+
                                  "<div class=\"divTableRow\">"+
-                                    "<div class=\"divTableCell\">"+"<strong>Email na studenta:</strong> "+data.students[i].EMAIL+"</div>"+
-                                    "<div class=\"divTableCell\">"+"<strong>Email na rodiče:</strong> "+data.students[i].EMAIL_PARENT+"</div>"+
-                                    "<div class=\"divTableCell\">"+"<strong>Tel. číslo na studenta:</strong> "+data.students[i].PHONE+"</div>"+
-                                    "<div class=\"divTableCell\">"+"<strong>Tel. číslo na rodiče:</strong> "+data.students[i].PHONE_PARENT+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Email na studenta:</strong> "+data.students[i].Email+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Email na rodiče:</strong> "+[data.students[i].Email_rodiče]+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Tel. číslo na studenta:</strong> "+data.students[i].Mobil+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Tel. číslo na rodiče:</strong> "+[data.students[i].Mobil_rodiče]+"</div>"+
                                  "</div>"+
                               "</div>"+
                               "</div>"+

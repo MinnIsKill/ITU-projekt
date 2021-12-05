@@ -10,7 +10,7 @@ $ pip3 --version
 $ pip install Flask
 
 #spuštění serveru
-##v příkazové řádce se dostaňte do adresáře '/flask' a následně
+##v příkazové řádce se dostaňte do adresáře 'Projekt/backend' a následně
 $ python3 run.py
 ##na server se dostanete otevřením url jímž je local path k souboru 'index.html' v libovolném prohlížeči, takže např.
 'file:///D:/mypathtothisfolder/xkalis03/project/index.html'

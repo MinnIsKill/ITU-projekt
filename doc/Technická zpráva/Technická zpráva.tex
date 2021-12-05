@@ -50,17 +50,23 @@
 	\vspace*{0.2cm} \\
 	\noindent\textbf{Návrh pro administrativní pracovníky} 
 	\begin{itemize}
-		\item ...
+		\item Reaktivní menu měnící obsah stránky bez stažení nového html
 		\vspace{-0.2cm}
-		\item ...
+		\item Vyhledávací tabulka s možností vyhledávání ve více sloupcích
 		\vspace{-0.2cm}
-		\item ...
+		\item Logika která po kliknutí na položku (žáka) v tabulce odkáže přímo na editační formulář
 		\vspace{-0.2cm}
-		\item ...
+		\item Formulář pro přídání nového žáka
 		\vspace{-0.2cm}
-		\item ...
+		\item Formulář pro editaci žáka
+		\vspace{-0.2cm}
+		\item Obsah formuláře perzistentní i po obnovení stránka
+		\vspace{-0.2cm}
+		\item Dynamické přizpůsobení celého okna při jeho minimalizaci či pro mobilní zařízení
 	\end{itemize}
 	\vspace*{0.2cm}
+
+	\newpage
 
 	\noindent\textbf{Návrh pro učitele} 
 	\begin{itemize}
@@ -108,9 +114,8 @@
 	\includegraphics[width=0.5\textwidth]{GUI.pdf}
 	\end{center}
 
-
-	\vspace*{\fill}
-	\clearpage
+	
+	\newpage
 
 
 	\section*{\large{Popis použitých nástrojů a implementace}}
@@ -120,11 +125,17 @@
 	\noindent\textbf{Flask: } Pythonový webový microframework s možností výberu frameworku pro objektovou práci s databází \\
 	\noindent\textbf{SQLAlchemy: } Námi vybraný framework pro Flask. Jedná se o objektovou vrstvu nad databázovou knihovnou, která umožňuje pracovat s 
 	tabulkami jako s kolekcemi objektů \\
+	\noindent\textbf{SQLite: } Tento databázový systém je vhodný pro menší databáze které neobsahují komplexní data a je podporovaný modulem 
+	SQLAlchemy , který používáme a proto jsme se rozhodly pro tento systém\\
 	\vspace*{0.5cm} \\
 	\noindent\textbf{\underline{V GUI pro administrativní pracovníky byly použity: }} \\
-	\noindent\textbf{x: } ... \\
-	\noindent\textbf{x: } ... \\
-	\noindent\textbf{x: } ... \\
+	\noindent\textbf{ReactJS: } Javascriptový framework pro tvorbu responzivních webových uživatelských rozhraní \\
+	\noindent\textbf{React Route DOM: } Package pro ReactJS který umožňuje dynamický přechod mezi podstránkami aplikace bez nutnosti stažení nového html 
+	souboru pro každou podstránku \\
+	\noindent\textbf{JSX (javascript XML): } Nadmnožina javascriptu používaná v ReactJS frameworku umožňující vkládání dynamických proměných do 
+	statického HTML \\
+	\noindent\textbf{HTML: } Pro tovorbu statického obsahu \\
+	\noindent\textbf{CSS: } Stylování stránky \\
 	\vspace*{0.5cm} \\
 	\noindent\textbf{\underline{V GUI pro učitele byly použity: }} \\
 	\noindent\textbf{HTML: } pro markup, vytváření základních bloků a spojování celků do závěrečné podoby z vizuálního hlediska \\
