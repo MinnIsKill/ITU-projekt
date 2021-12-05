@@ -1,3 +1,5 @@
+#author: Jan Lutonský, xluton02
+
 from flask import Flask, render_template, url_for, request, redirect 
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
