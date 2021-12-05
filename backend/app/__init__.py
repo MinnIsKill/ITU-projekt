@@ -40,7 +40,7 @@ class Person(db.Model):
         return("id:[{}]-date_of_creatin:|{}| name:\"{}\" surname:\"{}\"".format(self.id,self.date_of_creatin,name,surname))
 
     def serialize(self):
-        return{"ID":str(self.id),"Jméno":self.name,"Příjmení":self.surname,"Nástroj":self.instrument, "Narozen":self.birthdate,"Mobil":self.phone,"Mobil rodiče":self.phone_parent,"Emali":self.email,"Email rodiče":self.email_parent}
+        return{"ID":str(self.id),"Jméno":self.name,"Příjmení":self.surname,"Nástroj":self.instrument, "Narozen":self.birthdate,"Mobil":self.phone,"Mobil-rodiče":self.phone_parent,"Emali":self.email,"Email-rodiče":self.email_parent}
 
 
 from app import views
