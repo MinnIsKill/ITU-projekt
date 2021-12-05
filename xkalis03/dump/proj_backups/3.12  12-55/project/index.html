@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8" />
+      <div id="wrapperHeader">
+         <div id="header">
+            <img src="assets/images/header2.jpg" alt="logo" />
+            <div class="centered">Hudební škola</div>
+         </div> 
+      </div>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="assets/styles.css">
+   </head>
+   
+<body>
+
+<!-- TOOLBAR -->
+<div class="navbar">
+   <a href="#home">Home</a>
+   <a href="#news">News</a>
+   <div class="dropdown">
+      <button class="dropbtn">Dropdown 
+         <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+         <a href="#">Link 1</a>
+         <a href="#">Link 2</a>
+         <a href="#">Link 3</a>
+      </div>
+   </div>
+   <div class="dropdown" style="float:right;">
+      <button class="dropbtn">Nastavení
+         <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+         <a href="#">Link 1</a>
+         <a href="#">Link 2</a>
+         <a href="#">Link 3</a>
+      </div>
+   </div>
+
+   <div class="login-container" style="float:right;">
+      <form action="/action_page.php">
+      <input type="text" placeholder="přihlašovací jméno" name="username">
+      <input type="text" placeholder="heslo" name="psw">
+      <button type="submit">Přihlásit</button>
+      </form>
+   </div>
+
+<!-- SEARCH BAR -->
+   <div class="search-container">
+      <form action="/action_page.php">
+         <input type="text" id="myInput" onkeyup="hideStudentsSearch()" placeholder="Vyhledej žáka nebo hudební nástroj...">
+      </form>
+   </div>
+<!-- SEARCH BAR -->
+
+</div>
+<!-- TOOLBAR -->
+
+</body>
+
+<p id="showData"></p>
+
+
+
+<!-- SEARCH BAR TABLE -->
+<table id="myAboveTable" style="width:100%">
+   <div style="height: 5px;">
+      <tr class="header">
+         <th style="width:50%;">Jméno</th>
+         <th style="width:50%;">Hudební nástroj</th>
+      </tr>
+   </div>
+   <div style="overflow-x:auto;">
+      <table id="myTable" class="scrollContent">
+         <tr>
+         <td>Biggus</td>
+         <td>kytara</td>
+         </tr>
+         <tr>
+         <td>Dickus</td>
+         <td>klávesy</td>
+         </tr>
+         <tr>
+         <td>Totallus</td>
+         <td>činely</td>
+         </tr>
+         <tr>
+         <td>Maximus</td>
+         <td>bicí</td>
+         </tr>
+         <tr>
+         <td>Biggus</td>
+         <td>kytara</td>
+         </tr>
+         <tr>
+         <td>Dickus</td>
+         <td>klávesy</td>
+         </tr>
+         <tr>
+         <td>Totallus</td>
+         <td>činely</td>
+         </tr>
+         <tr>
+         <td>Maximus</td>
+         <td>bicí</td>
+         </tr>
+         <tr>
+         <td>Biggus</td>
+         <td>kytara</td>
+         </tr>
+         <tr>
+         <td>Dickus</td>
+         <td>klávesy</td>
+         </tr>
+         <tr>
+         <td>Totallus</td>
+         <td>činely</td>
+         </tr>
+         <tr>
+         <td>Maximus</td>
+         <td>bicí</td>
+         </tr>
+         <tr>
+         <td>Biggus</td>
+         <td>kytara</td>
+         </tr>
+         <tr>
+         <td>Dickus</td>
+         <td>klávesy</td>
+         </tr>
+         <tr>
+         <td>Totallus</td>
+         <td>činely</td>
+         </tr>
+         <tr>
+         <td>Maximus</td>
+         <td>bicí</td>
+         </tr>
+      </table>
+   </div>
+</table>
+<!-- SEARCH BAR TABLE -->
+
+<script>
+   function hideStudentsSearch() {
+     // Declare variables
+     var input, filter, table, tr, td, i, txtValue;
+     input = document.getElementById("myInput");
+     filter = input.value.toUpperCase();
+     table = document.getElementById("myTable");
+     tr = table.getElementsByTagName("tr");
+   
+     // Loop through all table rows, and hide those who don't match the search query
+     for (i = 0; i < tr.length; i++) {
+       td = tr[i].getElementsByTagName("td")[0];
+       td2 = tr[i].getElementsByTagName("td")[1];
+       if (td || td2) {
+         txtValue = td.textContent || td.innerText;
+         txtValue2 = td2.textContent || td2.innerText;
+         if ((txtValue.toUpperCase().indexOf(filter) > -1) || (txtValue2.toUpperCase().indexOf(filter) > -1)) {
+           tr[i].style.display = "";
+         } else {
+           tr[i].style.display = "none";
+         }
+       }
+     }
+   }
+   </script>
+
+
+<script>
+   //python3 run.py
+   fetch("http://localhost:5000/dumpStudents",{method: "GET"})
+      .then(function(resp) {
+         return resp.json();
+      })
+      .then(function(data){
+         console.log(data); //manipuluju dál s 'data'
+         console.log(data.students[0]);
+         console.log(data.students[0].ID);
+         console.log(data.students.length);
+         CreateTableFromJSON(data);
+         //CreateMyTable(data);
+
+      //tady nacpu for cyklus a narvu je do variable
+         //data.students[i].ID/NAME/SURNAME, spojovat plusk
+      })
+
+   function CreateTableFromJSON(data) {
+
+       // EXTRACT VALUE FOR HTML HEADER. 
+       // ('Book ID', 'Book Name', 'Category' and 'Price')
+       var col = [];
+       for (var i = 0; i < data.students.length; i++) {
+           for (var key in data.students[i]) {
+               if (col.indexOf(key) === -1) {
+                   col.push(key);
+               }
+           }
+       }
+
+       // CREATE DYNAMIC TABLE.
+       var table = document.createElement('table');
+       var tableAbove = document.createElement('table');
+       tableAbove.setAttribute("id","myAboveTable");
+       tableAbove.setAttribute("style","width: 99vw");
+       table.id = "myTable";
+       table.style.width = "99vw";
+       table.style.maxHeight = "300px";
+       table.class="scrollContent";
+
+       // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+
+       var tr = tableAbove.insertRow(-1);                   // TABLE ROW.
+
+       for (var i = 0; i < col.length; i++) {
+           var th = document.createElement("th");      // TABLE HEADER.
+           th.setAttribute("style","myAboveTable th");
+           th.innerHTML = col[i];
+           tr.appendChild(th);
+       }
+
+       // ADD JSON DATA TO THE TABLE AS ROWS.
+       for (var i = 0; i < data.students.length; i++) {
+
+           tr = table.insertRow(-1);
+
+           for (var j = 0; j < col.length; j++) {
+               var tabCell = tr.insertCell(-1);
+               tabCell.innerHTML = data.students[i][col[j]];
+           }
+       }
+
+       // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+       var divContainer = document.getElementById("showData");
+       divContainer.innerHTML = "";
+       divContainer.appendChild(tableAbove);
+       divContainer.appendChild(table);
+   }
+</script>
+
+
+</html>

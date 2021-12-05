@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8" />
+      <div id="wrapperHeader">
+         <div id="header">
+          <img src="assets/images/header2.jpg" alt="logo" />
+          <div class="centered">Hudební škola</div>
+         </div> 
+        </div>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="assets/styles.css">
+   </head>
+   
+<body>
+
+<!-- TOOLBAR -->
+<div class="navbar">
+   <a href="#home">Home</a>
+   <a href="#news">News</a>
+   <div class="dropdown">
+      <button class="dropbtn">Dropdown 
+         <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+         <a href="#">Link 1</a>
+         <a href="#">Link 2</a>
+         <a href="#">Link 3</a>
+      </div>
+   </div>
+   <div class="dropdown" style="float:right;">
+      <button class="dropbtn">Nastavení
+         <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+         <a href="#">Link 1</a>
+         <a href="#">Link 2</a>
+         <a href="#">Link 3</a>
+      </div>
+   </div>
+
+   <div class="login-container" style="float:right;">
+      <form action="/action_page.php">
+      <input type="text" placeholder="přihlašovací jméno" name="username">
+      <input type="text" placeholder="heslo" name="psw">
+      <button type="submit">Přihlásit</button>
+      </form>
+   </div>
+
+<!-- SEARCH BAR -->
+   <div class="search-container">
+      <form action="/action_page.php">
+         <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Vyhledej žáka nebo hudební nástroj...">
+      </form>
+    </div>
+<!-- SEARCH BAR -->
+
+</div>
+<!-- TOOLBAR -->
+
+
+<!-- SEARCH BAR TABLE -->
+<table id="myTable">
+   <tr class="header">
+   <th style="width:60%;">Jméno</th>
+   <th style="width:40%;">Hudební nástroj</th>
+   </tr>
+   <tr>
+   <td>Biggus</td>
+   <td>kytara</td>
+   </tr>
+   <tr>
+   <td>Dickus</td>
+   <td>klávesy</td>
+   </tr>
+   <tr>
+   <td>Totallus</td>
+   <td>činely</td>
+   </tr>
+   <tr>
+   <td>Maximus</td>
+   <td>bicí</td>
+   </tr>
+</table>
+ 
+ <script>
+   function myFunction() {
+     // Declare variables
+     var input, filter, table, tr, td, i, txtValue;
+     input = document.getElementById("myInput");
+     filter = input.value.toUpperCase();
+     table = document.getElementById("myTable");
+     tr = table.getElementsByTagName("tr");
+   
+     // Loop through all table rows, and hide those who don't match the search query
+     for (i = 0; i < tr.length; i++) {
+       td = tr[i].getElementsByTagName("td")[0];
+       td2 = tr[i].getElementsByTagName("td")[1];
+       if (td || td2) {
+         txtValue = td.textContent || td.innerText;
+         txtValue2 = td2.textContent || td2.innerText;
+         if ((txtValue.toUpperCase().indexOf(filter) > -1) || (txtValue2.toUpperCase().indexOf(filter) > -1)) {
+           tr[i].style.display = "";
+         } else {
+           tr[i].style.display = "none";
+         }
+       }
+     }
+   }
+   </script>
+<!-- SEARCH BAR TABLE -->
+
+
+</body>
+</html>

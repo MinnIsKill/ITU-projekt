@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<!-- =======================================
+               HEAD START
+======================================== -->
+   <head>
+      <meta charset="UTF-8" />
+      <div id="wrapperHeader">
+         <div id="header">
+            <img src="assets/images/header2.jpg" alt="logo" />
+            <div class="centered">Hudební škola</div>
+         </div> 
+      </div>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="assets/styles.css">
+      <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+   </head>
+<!-- =======================================
+                HEAD END
+======================================== -->
+<!--  python3 run.py -->
+<!-- =======================================
+               BODY START
+======================================== -->
+<body>
+
+<!-- TOOLBAR -->
+<div class="navbar">
+   <a href='#home'>Domů</a>
+   <a href='#studentdatabase'>Databáze</a>
+   <div class="dropdown">
+      <button class="dropbtn">Novinky 
+         <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+         <a href='#news-school'>Škola</a>
+         <a href='#news-events'>Akce</a>
+         <a href='#news-COVID'>COVID info</a>
+         <a href='#news-directive'>Vládní nařízení</a>
+         <a href='#news-importantinfo'>Důležité zprávy</a>
+      </div>
+   </div>
+   <div class="dropdown" style="float:right;">
+      <button class="dropbtn">Nastavení
+         <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+         <a href='#settings-scheme'>Motiv</a>
+         <a href='#settings-account'>Účet</a>
+         <a href='#settings-advanced'>Pokročilé</a>
+      </div>
+   </div>
+
+   <div class="login-container" style="float:right;">
+      <form action="/action_page.php">
+      <input type="text" placeholder="ID" name="username">
+      <input type="text" placeholder="heslo" name="psw">
+      <button type="submit">Přihlásit</button>
+      </form>
+   </div>
+
+<!-- SEARCH BAR -->
+   <div class="search-container">
+      <form action="/action_page.php">
+         <input type="text" id="myInput" onkeyup="hideStudentsSearch()" placeholder="Vyhledej žáka nebo hudební nástroj...">
+      </form>
+   </div>
+<!-- SEARCH BAR -->
+
+</div>
+<!-- TOOLBAR -->
+
+</body>
+<!-- =======================================
+               BODY END
+======================================== -->
+
+<!-- =======================================
+          DATABASE TAB START
+======================================== -->
+<!-- SEARCH BAR TABLE -->
+<div id ="studentdatabase" class="selector">
+<table id="myAboveTable">
+   <div style="height: 5px;">
+      <tr class="header">
+         <th style="width:5%; text-align: center;">ID</th>
+         <th style="width:30%">Jméno</th>
+         <th style="width:30%">Příjmení</th>
+         <th style="width:30%">Hudební nástroj</th>
+      </tr>
+   </div>
+   <div style="overflow-x:auto;">
+      <table id="myTable" class="scrollContent" style="max-height:0px">
+         <span id="content"></span>
+         <span id="btnContent"></span>
+         <script>
+            //python3 run.py
+            fetch("http://localhost:5000/dumpStudents",{method: "GET"})
+               .then(function(resp) {
+                  return resp.json();
+               })
+               .then(function(data){
+                  //console.log(data); //manipuluju dál s 'data'
+                  //console.log(data.students[0]);
+                  //console.log(data.students[0].ID);
+                  //console.log(data.students.length);
+                  PrintJSONIntoTable(data);
+         
+               //tady nacpu for cyklus a narvu je do variable
+                  //data.students[i].ID/NAME/SURNAME, spojovat pluskama
+               })
+   
+            function PrintJSONIntoTable(data) {
+               var results = "<table id=\"myTable\" class=\"scrollContent\">";
+               var btnData = "";
+               for (var i = 0; i < data.students.length; i++) {
+                  results+="<tr><td><button id =\"myBtn["+[i]+"]\" onclick=\"btnClicked()\" style=\"width: 100%\">"+data.students[i].ID+
+                     "</button></td>"+"<td style=\"width: 30%\">"+data.students[i].NAME+
+                     "</td><td style=\"width: 30%\">"+data.students[i].SURNAME+
+                     "</td><td style=\"width: 30%\">"+data.students[i].SURNAME+
+                     "</td></tr>";
+                  //btnData+= data.students[i].NAME+"\n";
+               }
+               results += "</table>";
+               console.log(results);
+               //console.log(btnData);
+               document.getElementById('content').innerHTML = results;
+               //document.getElementById('btnContent').innerHTML = btnData;
+            }
+            function btnClicked(){
+               modal.style.display = "block";
+            }
+         </script>
+         
+         <!-- Trigger/Open The Modal -->
+         <button id="myBtn" style="display:none">Open Modal</button>
+
+         <!-- The Modal -->
+         <div id="myModal" class="modal">
+
+         <!-- Modal content -->
+         <div class="modal-content">
+            <div class="modal-header">
+               <span class="close">&times;</span>
+               <h2 style="text-align: center;">ROZVRH</h2>
+            </div>
+            <div class="modal-body">
+               <form id="form1">
+                  <div class="div-table">
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">Čas</div>
+                        <div class="div-table-col" style="text-align: center;">Po</div>
+                        <div class="div-table-col" style="text-align: center;">Út</div>
+                        <div class="div-table-col" style="text-align: center;">St</div>
+                        <div class="div-table-col" style="text-align: center;">Čt</div>
+                        <div class="div-table-col" style="text-align: center;">Pá</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">8:00-8:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">9:00-9:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">10:00-10:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">11:00-11:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">12:00-12:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">13:00-13:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">14:00-14:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">15:00-15:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">16:00-16:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">17:00-17:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">18:00-18:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">19:00-19:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+               <h3>-</h3>
+             </div>
+         </div>
+
+         </div>
+
+         <script>
+         // Get the modal
+         var modal = document.getElementById("myModal");
+         // Get the button that opens the modal
+         var btn = document.getElementById("myBtn");
+         // Get the <span> element that closes the modal
+         var span = document.getElementsByClassName("close")[0];
+         // When the user clicks on <span> (x), close the modal
+         span.onclick = function() {
+            modal.style.display = "none";
+         }
+         // When the user clicks anywhere outside of the modal, close it
+         window.onclick = function(event) {
+            if (event.target == modal) {
+               modal.style.display = "none";
+            }
+         }
+         </script>
+         <!-- SEARCH BAR TABLE VIEW HANDLING -->
+         <script>
+            function hideStudentsSearch() {
+              // Declare variables
+              var input, filter, table, tr, td, i, txtValue;
+              input = document.getElementById("myInput");
+              filter = input.value.toUpperCase();
+              table = document.getElementById("myTable");
+              tr = table.getElementsByTagName("tr");
+            
+              // Loop through all table rows, and hide those who don't match the search query
+              for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                td2 = tr[i].getElementsByTagName("td")[1];
+                td3 = tr[i].getElementsByTagName("td")[2];
+                td4 = tr[i].getElementsByTagName("td")[3];
+                if (td || td2 || td3 || td4) {
+                  txtValue = td.textContent || td.innerText;
+                  txtValue2 = td2.textContent || td2.innerText;
+                  txtValue3 = td3.textContent || td3.innerText;
+                  txtValue4 = td4.textContent || td4.innerText;
+                  if ((txtValue.toUpperCase().indexOf(filter) > -1) || (txtValue2.toUpperCase().indexOf(filter) > -1)
+                     || (txtValue3.toUpperCase().indexOf(filter) > -1) || (txtValue4.toUpperCase().indexOf(filter) > -1)) {
+                    tr[i].style.display = "";
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                }
+              }
+            }
+         </script>
+         <!-- SEARCH BAR TABLE VIEW HANDLING -->
+      </table>
+   </div>
+</table>
+</div>
+<!-- SEARCH BAR TABLE -->
+<!-- =======================================
+            DATABASE TAB END
+======================================== -->
+
+
+
+<!-- =======================================
+               OTHER TABS
+======================================== -->
+
+<!-- ============ HOME ================= -->
+<div id="home" class="selector">
+   <h1 style="text-align: center;">Domovská stránka</h1>
+</div>
+
+<!-- ========= NEWS/SCHOOL ============= -->
+<div id="news-school" class="selector">
+   <h1 style="text-align: center;">Školní novinky</h1>
+</div>
+
+<!-- ========= NEWS/EVENTS ============= -->
+<div id="news-events" class="selector">
+   <h1 style="text-align: center;">Školní akce</h1>
+</div>
+
+<!-- ============ NEWS/COVID ================= -->
+<div id="news-COVID" class="selector">
+   <h1 style="text-align: center;">COVID info</h1>
+</div>
+
+<!-- ============ NEWS/DIRECTIVE ================= -->
+<div id="news-directive" class="selector">
+   <h1 style="text-align: center;">Vládní nařízení</h1>
+</div>
+
+<!-- ============ NEWS/IMPORTANTINFO ================= -->
+<div id="news-importantinfo" class="selector">
+   <h1 style="text-align: center;">Důležité informace</h1>
+</div>
+
+<!-- ============= SETTINGS/SCHEME ================= -->
+<div id="settings-scheme" class="selector">
+   <h1 style="text-align: center;">Přizpůsobení</h1>
+</div>
+
+<!-- ============ SETTINGS/ACCOUNT ================= -->
+<div id="settings-account" class="selector">
+   <h1 style="text-align: center;">Nastavení účtu</h1>
+</div>
+
+<!-- =========== SETTINGS/ADVANCED ================= -->
+<div id="settings-advanced" class="selector">
+   <h1 style="text-align: center;">Pokročilá nastavení</h1>
+</div>
+
+
+
+
+<!-- TAB SWITCHING LOGIC -->
+<script>
+   window.onmousemove = function chooseInput(){
+      var url = window.location.hash;
+      console.log(url);
+      //document.getElementById(url).style.display = "";
+      $('div.selector').not(url).hide();
+      $('div.selector').filter(url).show();
+   }
+</script>
+<!-- TAB SWITCHING LOGIC -->
+
+
+</html>

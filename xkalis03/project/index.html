@@ -1,0 +1,867 @@
+<!--
+   Index.html
+
+   Obsahuje markup logiku, vytváření základních bloků a spojování celků do závěrečné podoby z vizuálního hlediska
+   
+   AUTOR:  Vojtěch Kališ (xkalis03@stud.fit.vutbr.cz)
+
+-->
+
+
+<!DOCTYPE html>
+<html>
+<!-- =======================================
+               HEAD START
+======================================== -->
+<head>
+   <meta charset="UTF-8" />
+   <div id="wrapperHeader">
+      <div id="header">
+         <img src="assets/images/header2.jpg" alt="logo" />
+         <a class="centered" href='#home'>Hudební škola</a>
+      </div> 
+   </div>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="assets/styles.css">
+   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<!-- =======================================
+                HEAD END
+======================================== -->
+
+<!-- =======================================
+               BODY START
+======================================== -->
+<body>
+
+<!-- ======= TOOLBAR START ============= -->
+<div class="navbar">
+   <a href='#home'>Domů</a>
+   <a href='#studentdatabase'>Databáze</a>
+   <div class="dropdown">
+      <button class="dropbtn">Novinky 
+         <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+         <a href='#news-school'>Škola</a>
+         <a href='#news-events'>Akce</a>
+         <a href='#news-COVID'>COVID info</a>
+         <a href='#news-directive'>Vládní nařízení</a>
+         <a href='#news-importantinfo'>Důležité zprávy</a>
+      </div>
+   </div>
+   <div class="dropdown" style="float:right;">
+      <button class="dropbtn">Nastavení
+         <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+         <a href='#settings-scheme'>Motiv</a>
+         <a href='#settings-account'>Účet</a>
+         <a href='#settings-advanced'>Pokročilé</a>
+      </div>
+   </div>
+
+<!-- ====== LOGIN BAR START ============ -->
+   <div class="login-container" style="float:right;">
+      <form action="/action_page.php">
+      <input type="text" placeholder="ID" name="username">
+      <input type="text" placeholder="heslo" name="password">
+      <button type="submit">Přihlásit</button>
+      </form>
+   </div>
+<!-- ======= LOGIN BAR END ============= -->
+
+<!-- ===== SEARCH BAR START ============ -->
+   <div class="search-container">
+      <form action="/action_page.php">
+         <input type="text" id="myInput" onkeyup="hideStudentsSearch()" placeholder="Vyhledej žáka nebo hudební nástroj...">
+      </form>
+   </div>
+<!-- ====== SEARCH BAR END ============= -->
+
+</div>
+<!-- ======== TOOLBAR END ============== -->
+
+</body>
+<!-- =======================================
+               BODY END
+======================================== -->
+
+<!-- =======================================
+          DATABASE TAB START
+======================================== -->
+<!-- SEARCH BAR TABLE START -->
+<div id ="studentdatabase" class="selector">
+<table id="myAboveTable">
+   <div style="height: 5px;">
+      <tr class="header">
+         <th style="width:5%; text-align: center;">ID</th>
+         <th style="width:30%">Jméno</th>
+         <th style="width:30%">Příjmení</th>
+         <th style="width:30%">Hudební nástroj</th>
+      </tr>
+   </div>
+   <div style="overflow-x:auto;">
+      <table id="myTable" class="scrollContent" style="max-height:0px">
+         <span id="content"></span>
+         <span id="btnContent"></span>
+         <script>
+            /* řekni si o JSON data ze serveru */
+            fetch("http://localhost:5000/dumpStudents",{method: "GET"})
+               .then(function(resp) {
+                  return resp.json();
+               })
+               .then(function(data){
+                  console.log(data); //manipuluju dál s 'data'
+                  //console.log(data.students[0]);
+                  //console.log(data.students[0].ID);
+                  //console.log(data.students.length);
+                  PrintJSONIntoTable(data);
+               })
+            /* vezmi získaná JSON data a vytvoř z nich HTML taublku */
+            function PrintJSONIntoTable(data) {
+               var results = "<table id=\"myTable\" class=\"scrollContent\">";
+               //var btnData = "";
+               for (var i = 0; i < data.students.length; i++) {
+                  results+="<tr><td><button id =\"myBtn["+[i]+"]\" onclick=\"btnClicked("+[i]+")\" style=\"width: 100%\">"+data.students[i].ID+
+                     "</button></td>"+"<td style=\"width: 30%\">"+data.students[i].NAME+
+                     "</td><td style=\"width: 30%\">"+data.students[i].SURNAME+
+                     "</td><td style=\"width: 30%\">"+data.students[i].INSTRUMENT+
+                     "</td></tr>";
+                  //btnData+= data.students[i].NAME+"\n";
+               }
+               results += "</table>";
+               console.log(results);
+               //console.log(btnData);
+               document.getElementById('content').innerHTML = results;
+               //document.getElementById('btnContent').innerHTML = btnData;
+               var jsonStudents = JSON.stringify(data);
+               console.log(jsonStudents);
+               document.getElementById('students').innerHTML = jsonStudents;
+            }            /* zobraz popup */
+         </script>
+         <!-- info o studentech -->
+         <button id="myBtn" style="display:none">Open Modal</button>
+         <!-- vytvoř popup -->
+         <div id="myModal" class="modal">
+         <!-- obsah popupu -->
+         <div class="modal-content">
+            <div class="modal-header">
+               <span class="close">&times;</span>
+               <h2 style="text-align: center;">PODROBNĚJŠÍ INFORMACE</h2>
+            </div>
+            <div class="modal-body">
+               <!--vytvoř rozvrh (pouze staticky hodnoty) -->
+               <span id="res"></span>
+               <div id="dataa">
+                  <span id="data1"></span>
+                  <script>
+                     function btnClicked(i){
+                        var datas;
+                        fetch("http://localhost:5000/dumpStudents",{method: "GET"})
+                           .then(function(resp) {
+                              return resp.json();
+                           })
+                           .then(function(data){
+                              datas= "<div class=\"divTable\">"+
+                              "<div class=\"divTableBody\">"+
+                                 "<div class=\"divTableRow\">"+
+                                    "<div class=\"divTableCell\">"+"<strong>Jméno žáka:</strong> "+data.students[i].NAME+"  "+data.students[i].SURNAME+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>ID žáka:</strong> "+data.students[i].ID+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Datum narození žáka:</strong> "+data.students[i].BIRTHDATE+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Hudební nástroje:</strong> "+data.students[i].INSTRUMENT+"</div>"+
+                                 "</div>"+
+                                 "<div class=\"divTableRow\">"+
+                                    "<div class=\"divTableCell\">"+"<strong>Email na studenta:</strong> "+data.students[i].EMAIL+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Email na rodiče:</strong> "+data.students[i].EMAIL_PARENT+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Tel. číslo na studenta:</strong> "+data.students[i].PHONE+"</div>"+
+                                    "<div class=\"divTableCell\">"+"<strong>Tel. číslo na rodiče:</strong> "+data.students[i].PHONE_PARENT+"</div>"+
+                                 "</div>"+
+                              "</div>"+
+                              "</div>"+
+                              "<div>";
+                              //console.log(datas);
+                              document.getElementById('data1').innerHTML = datas;
+                           })
+                        //console.log(i);
+                        /* zobraz popup okno s načtenými hodnotami */
+                        modal.style.display = "block";
+                     }
+                  </script>
+               </div>
+               <!-- zobraz studentův rozvrh (dalo by se vyplnit dynamicky úplně totožným způsobem jako ostatní data v popupu, viz. výše,
+                    ovšem pro naše účely bude stačit mít rozvrh pouze statický, jelikož nechci server přehltit daty a myslím si, že v tomhle
+                    okamžiku je loadění JSON dat již pokryto v dostatečném měřítku) -->
+               <form id="form1">
+                  <div class="div-table">
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">Čas</div>
+                        <div class="div-table-col" style="text-align: center;">Po</div>
+                        <div class="div-table-col" style="text-align: center;">Út</div>
+                        <div class="div-table-col" style="text-align: center;">St</div>
+                        <div class="div-table-col" style="text-align: center;">Čt</div>
+                        <div class="div-table-col" style="text-align: center;">Pá</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">8:00-8:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">9:00-9:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">10:00-10:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">11:00-11:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">12:00-12:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">13:00-13:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">14:00-14:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">15:00-15:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">16:00-16:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">17:00-17:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">18:00-18:50</div>
+                        <div class="div-table-col" style="text-align: center;">X</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                     <div class="div-table-row">
+                        <div class="div-table-col" style="text-align: center;">19:00-19:50</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                        <div class="div-table-col" style="text-align: center;">&nbsp;</div>
+                     </div>
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+               <h3>-</h3>
+             </div>
+         </div>
+
+         </div>
+
+         <script>
+
+         var modal = document.getElementById("myModal");
+         var btn = document.getElementById("myBtn");
+         var span = document.getElementsByClassName("close")[0];
+         /* zavři popup když uživatel klikne na křížek */
+         span.onclick = function() {
+            modal.style.display = "none";
+         }
+         /* zavři popup když uživatel klikne mimo popup */
+         window.onclick = function(event) {
+            if (event.target == modal) {
+               modal.style.display = "none";
+            }
+         }
+         </script>
+         <!-- SEARCH BAR TABLE VIEW HANDLING START -->
+         <script>
+            /* funkce zajišťující logiku zobrazování výsledků vyhledávání */
+            function hideStudentsSearch() {
+              var input, filter, table, tr, td, i, txtValue;
+              input = document.getElementById("myInput");
+              filter = input.value.toUpperCase();
+              table = document.getElementById("myTable");
+              tr = table.getElementsByTagName("tr");
+            
+              /* iteruj všemi řádky a položkami tabulky */
+              for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                td2 = tr[i].getElementsByTagName("td")[1];
+                td3 = tr[i].getElementsByTagName("td")[2];
+                td4 = tr[i].getElementsByTagName("td")[3];
+                if (td || td2 || td3 || td4) {
+                  txtValue = td.textContent || td.innerText;
+                  txtValue2 = td2.textContent || td2.innerText;
+                  txtValue3 = td3.textContent || td3.innerText;
+                  txtValue4 = td4.textContent || td4.innerText;
+                  if ((txtValue.toUpperCase().indexOf(filter) > -1) || (txtValue2.toUpperCase().indexOf(filter) > -1)
+                     || (txtValue3.toUpperCase().indexOf(filter) > -1) || (txtValue4.toUpperCase().indexOf(filter) > -1)) {
+                    tr[i].style.display = "";
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                }
+              }
+            }
+         </script>
+         <!-- SEARCH BAR TABLE VIEW HANDLING END -->
+      </table>
+   </div>
+</table>
+</div>
+<!-- SEARCH BAR TABLE END -->
+<!-- =======================================
+            DATABASE TAB END
+======================================== -->
+
+
+
+<!-- =======================================
+               OTHER TABS
+======================================== -->
+
+<!-- ============ HOME ================= -->
+<div id="home" class="selector">
+   <article class="page-basic">
+      <h1>Domovská stránka</h1>
+      <article class="basic">
+        <h2>Lorem ipsum #1</h2>
+        <p>Mauris metus. Et harum quidem rerum facilis est et expedita distinctio. Fusce suscipit libero eget elit. In convallis. 
+           Duis pulvinar. Proin mattis lacinia justo. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Integer 
+           imperdiet lectus quis justo. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim 
+           ipsum id lacus. Aliquam erat volutpat. Vivamus porttitor turpis ac leo. Vivamus ac leo pretium faucibus. Aliquam ornare 
+           wisi eu metus. Nullam rhoncus aliquam metus. Mauris tincidunt sem sed arcu. Maecenas libero. Integer tempor.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #2</h2>
+        <p>Morbi scelerisque luctus velit. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Aenean id metus 
+           id velit ullamcorper pulvinar. Maecenas libero. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. 
+           Quisque porta. Maecenas lorem. Etiam neque. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Etiam dictum 
+           tincidunt diam. Nulla pulvinar eleifend sem.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #3</h2>
+        <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+           eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+           vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+           Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+           Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+           mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+           ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+           per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+           ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+           nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+           vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+      </article>
+      <picture>
+         <img src="assets/images/violin.jpg" class="center" alt="violin" style="width: 500px; height:200px;">
+      </picture>
+      <article class="basic">
+         <h2>Lorem ipsum #4</h2>
+         <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+            eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+            vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+            Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+            Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+            mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+            ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+            per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+            ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+            vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+       </article>
+    </article>
+</div>
+
+<!-- ========= NEWS/SCHOOL ============= -->
+<div id="news-school" class="selector">
+   <article class="page-basic">
+      <h1>Školní novinky</h1>
+      <article class="basic">
+        <h2>Lorem ipsum #1</h2>
+        <p>Mauris metus. Et harum quidem rerum facilis est et expedita distinctio. Fusce suscipit libero eget elit. In convallis. 
+           Duis pulvinar. Proin mattis lacinia justo. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Integer 
+           imperdiet lectus quis justo. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim 
+           ipsum id lacus. Aliquam erat volutpat. Vivamus porttitor turpis ac leo. Vivamus ac leo pretium faucibus. Aliquam ornare 
+           wisi eu metus. Nullam rhoncus aliquam metus. Mauris tincidunt sem sed arcu. Maecenas libero. Integer tempor.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #2</h2>
+        <p>Morbi scelerisque luctus velit. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Aenean id metus 
+           id velit ullamcorper pulvinar. Maecenas libero. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. 
+           Quisque porta. Maecenas lorem. Etiam neque. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Etiam dictum 
+           tincidunt diam. Nulla pulvinar eleifend sem.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #3</h2>
+        <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+           eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+           vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+           Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+           Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+           mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+           ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+           per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+           ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+           nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+           vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+      </article>
+      <picture>
+         <img src="assets/images/school.png" class="center" alt="school" style="width: 500px; height:200px;">
+      </picture>
+      <article class="basic">
+         <h2>Lorem ipsum #4</h2>
+         <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+            eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+            vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+            Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+            Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+            mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+            ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+            per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+            ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+            vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+       </article>
+    </article>
+</div>
+
+<!-- ========= NEWS/EVENTS ============= -->
+<div id="news-events" class="selector">
+   <article class="page-basic">
+      <h1>Školní akce</h1>
+      <article class="basic">
+        <h2>Lorem ipsum #1</h2>
+        <p>Mauris metus. Et harum quidem rerum facilis est et expedita distinctio. Fusce suscipit libero eget elit. In convallis. 
+           Duis pulvinar. Proin mattis lacinia justo. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Integer 
+           imperdiet lectus quis justo. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim 
+           ipsum id lacus. Aliquam erat volutpat. Vivamus porttitor turpis ac leo. Vivamus ac leo pretium faucibus. Aliquam ornare 
+           wisi eu metus. Nullam rhoncus aliquam metus. Mauris tincidunt sem sed arcu. Maecenas libero. Integer tempor.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #2</h2>
+        <p>Morbi scelerisque luctus velit. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Aenean id metus 
+           id velit ullamcorper pulvinar. Maecenas libero. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. 
+           Quisque porta. Maecenas lorem. Etiam neque. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Etiam dictum 
+           tincidunt diam. Nulla pulvinar eleifend sem.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #3</h2>
+        <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+           eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+           vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+           Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+           Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+           mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+           ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+           per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+           ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+           nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+           vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+      </article>
+      <picture>
+         <img src="assets/images/party.png" class="center" alt="party" style="width: 500px; height:200px;">
+      </picture>
+      <article class="basic">
+         <h2>Lorem ipsum #4</h2>
+         <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+            eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+            vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+            Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+            Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+            mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+            ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+            per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+            ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+            vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+       </article>
+    </article>
+</div>
+
+<!-- ============ NEWS/COVID ================= -->
+<div id="news-COVID" class="selector">
+   <article class="page-basic">
+      <h1>COVID info</h1>
+      <article class="basic">
+        <h2>Lorem ipsum #1</h2>
+        <p>Mauris metus. Et harum quidem rerum facilis est et expedita distinctio. Fusce suscipit libero eget elit. In convallis. 
+           Duis pulvinar. Proin mattis lacinia justo. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Integer 
+           imperdiet lectus quis justo. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim 
+           ipsum id lacus. Aliquam erat volutpat. Vivamus porttitor turpis ac leo. Vivamus ac leo pretium faucibus. Aliquam ornare 
+           wisi eu metus. Nullam rhoncus aliquam metus. Mauris tincidunt sem sed arcu. Maecenas libero. Integer tempor.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #2</h2>
+        <p>Morbi scelerisque luctus velit. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Aenean id metus 
+           id velit ullamcorper pulvinar. Maecenas libero. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. 
+           Quisque porta. Maecenas lorem. Etiam neque. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Etiam dictum 
+           tincidunt diam. Nulla pulvinar eleifend sem.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #3</h2>
+        <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+           eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+           vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+           Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+           Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+           mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+           ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+           per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+           ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+           nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+           vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+      </article>
+      <picture>
+         <img src="assets/images/mask.jpg" class="center" alt="mask" style="width: 500px; height:200px;">
+      </picture>
+      <article class="basic">
+         <h2>Lorem ipsum #4</h2>
+         <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+            eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+            vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+            Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+            Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+            mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+            ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+            per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+            ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+            vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+       </article>
+    </article>
+</div>
+
+<!-- ============ NEWS/DIRECTIVE ================= -->
+<div id="news-directive" class="selector">
+   <article class="page-basic">
+      <h1>Vládní nařízení</h1>
+      <article class="basic">
+        <h2>Lorem ipsum #1</h2>
+        <p>Mauris metus. Et harum quidem rerum facilis est et expedita distinctio. Fusce suscipit libero eget elit. In convallis. 
+           Duis pulvinar. Proin mattis lacinia justo. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Integer 
+           imperdiet lectus quis justo. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim 
+           ipsum id lacus. Aliquam erat volutpat. Vivamus porttitor turpis ac leo. Vivamus ac leo pretium faucibus. Aliquam ornare 
+           wisi eu metus. Nullam rhoncus aliquam metus. Mauris tincidunt sem sed arcu. Maecenas libero. Integer tempor.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #2</h2>
+        <p>Morbi scelerisque luctus velit. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Aenean id metus 
+           id velit ullamcorper pulvinar. Maecenas libero. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. 
+           Quisque porta. Maecenas lorem. Etiam neque. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Etiam dictum 
+           tincidunt diam. Nulla pulvinar eleifend sem.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #3</h2>
+        <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+           eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+           vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+           Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+           Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+           mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+           ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+           per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+           ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+           nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+           vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+      </article>
+      <picture>
+         <img src="assets/images/hammer.jpg" class="center" alt="hammer" style="width: 500px; height:200px;">
+      </picture>
+      <article class="basic">
+         <h2>Lorem ipsum #4</h2>
+         <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+            eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+            vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+            Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+            Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+            mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+            ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+            per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+            ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+            vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+       </article>
+    </article>
+</div>
+
+<!-- ============ NEWS/IMPORTANTINFO ================= -->
+<div id="news-importantinfo" class="selector">
+   <article class="page-basic">
+      <h1>Důležité informace</h1>
+      <article class="basic">
+        <h2>Lorem ipsum #1</h2>
+        <p>Mauris metus. Et harum quidem rerum facilis est et expedita distinctio. Fusce suscipit libero eget elit. In convallis. 
+           Duis pulvinar. Proin mattis lacinia justo. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Integer 
+           imperdiet lectus quis justo. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim 
+           ipsum id lacus. Aliquam erat volutpat. Vivamus porttitor turpis ac leo. Vivamus ac leo pretium faucibus. Aliquam ornare 
+           wisi eu metus. Nullam rhoncus aliquam metus. Mauris tincidunt sem sed arcu. Maecenas libero. Integer tempor.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #2</h2>
+        <p>Morbi scelerisque luctus velit. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Aenean id metus 
+           id velit ullamcorper pulvinar. Maecenas libero. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. 
+           Quisque porta. Maecenas lorem. Etiam neque. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Etiam dictum 
+           tincidunt diam. Nulla pulvinar eleifend sem.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #3</h2>
+        <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+           eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+           vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+           Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+           Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+           mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+           ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+           per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+           ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+           nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+           vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+      </article>
+      <picture>
+         <img src="assets/images/news.jpg" class="center" alt="news" style="width: 500px; height:200px;">
+      </picture>
+      <article class="basic">
+         <h2>Lorem ipsum #4</h2>
+         <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+            eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+            vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+            Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+            Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+            mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+            ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+            per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+            ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+            vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+       </article>
+    </article>
+</div>
+
+<!-- ============= SETTINGS/SCHEME ================= -->
+<div id="settings-scheme" class="selector">
+   <article class="page-basic">
+      <h1>Přizpůsobení</h1>
+      <article class="basic">
+        <h2>Lorem ipsum #1</h2>
+        <p>Mauris metus. Et harum quidem rerum facilis est et expedita distinctio. Fusce suscipit libero eget elit. In convallis. 
+           Duis pulvinar. Proin mattis lacinia justo. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Integer 
+           imperdiet lectus quis justo. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim 
+           ipsum id lacus. Aliquam erat volutpat. Vivamus porttitor turpis ac leo. Vivamus ac leo pretium faucibus. Aliquam ornare 
+           wisi eu metus. Nullam rhoncus aliquam metus. Mauris tincidunt sem sed arcu. Maecenas libero. Integer tempor.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #2</h2>
+        <p>Morbi scelerisque luctus velit. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Aenean id metus 
+           id velit ullamcorper pulvinar. Maecenas libero. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. 
+           Quisque porta. Maecenas lorem. Etiam neque. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Etiam dictum 
+           tincidunt diam. Nulla pulvinar eleifend sem.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #3</h2>
+        <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+           eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+           vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+           Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+           Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+           mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+           ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+           per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+           ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+           nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+           vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+      </article>
+      <picture>
+         <img src="assets/images/violin.jpg" class="center" alt="violin" style="width: 500px; height:200px;">
+      </picture>
+      <article class="basic">
+         <h2>Lorem ipsum #4</h2>
+         <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+            eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+            vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+            Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+            Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+            mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+            ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+            per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+            ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+            vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+       </article>
+    </article>
+</div>
+
+<!-- ============ SETTINGS/ACCOUNT ================= -->
+<div id="settings-account" class="selector">
+   <article class="page-basic">
+      <h1>Nastavení účtu</h1>
+      <article class="basic">
+        <h2>Lorem ipsum #1</h2>
+        <p>Mauris metus. Et harum quidem rerum facilis est et expedita distinctio. Fusce suscipit libero eget elit. In convallis. 
+           Duis pulvinar. Proin mattis lacinia justo. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Integer 
+           imperdiet lectus quis justo. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim 
+           ipsum id lacus. Aliquam erat volutpat. Vivamus porttitor turpis ac leo. Vivamus ac leo pretium faucibus. Aliquam ornare 
+           wisi eu metus. Nullam rhoncus aliquam metus. Mauris tincidunt sem sed arcu. Maecenas libero. Integer tempor.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #2</h2>
+        <p>Morbi scelerisque luctus velit. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Aenean id metus 
+           id velit ullamcorper pulvinar. Maecenas libero. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. 
+           Quisque porta. Maecenas lorem. Etiam neque. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Etiam dictum 
+           tincidunt diam. Nulla pulvinar eleifend sem.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #3</h2>
+        <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+           eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+           vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+           Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+           Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+           mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+           ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+           per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+           ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+           nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+           vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+      </article>
+      <picture>
+         <img src="assets/images/violin.jpg" class="center" alt="violin" style="width: 500px; height:200px;">
+      </picture>
+      <article class="basic">
+         <h2>Lorem ipsum #4</h2>
+         <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+            eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+            vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+            Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+            Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+            mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+            ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+            per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+            ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+            vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+       </article>
+    </article>
+</div>
+
+<!-- =========== SETTINGS/ADVANCED ================= -->
+<div id="settings-advanced" class="selector">
+   <article class="page-basic">
+      <h1>Pokročilá nastavení</h1>
+      <article class="basic">
+        <h2>Lorem ipsum #1</h2>
+        <p>Mauris metus. Et harum quidem rerum facilis est et expedita distinctio. Fusce suscipit libero eget elit. In convallis. 
+           Duis pulvinar. Proin mattis lacinia justo. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Integer 
+           imperdiet lectus quis justo. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim 
+           ipsum id lacus. Aliquam erat volutpat. Vivamus porttitor turpis ac leo. Vivamus ac leo pretium faucibus. Aliquam ornare 
+           wisi eu metus. Nullam rhoncus aliquam metus. Mauris tincidunt sem sed arcu. Maecenas libero. Integer tempor.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #2</h2>
+        <p>Morbi scelerisque luctus velit. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Aenean id metus 
+           id velit ullamcorper pulvinar. Maecenas libero. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. 
+           Quisque porta. Maecenas lorem. Etiam neque. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Etiam dictum 
+           tincidunt diam. Nulla pulvinar eleifend sem.</p>
+      </article>
+      <article class="basic">
+        <h2>Lorem ipsum #3</h2>
+        <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+           eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+           vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+           Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+           Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+           mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+           ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+           per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+           ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+           nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+           vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+      </article>
+      <picture>
+         <img src="assets/images/violin.jpg" class="center" alt="violin" style="width: 500px; height:200px;">
+      </picture>
+      <article class="basic">
+         <h2>Lorem ipsum #4</h2>
+         <p>Donec quis nibh at felis congue commodo. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
+            eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Proin pede metus, vulputate nec, fermentum fringilla, 
+            vehicula vitae, justo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla non lectus sed nisl molestie malesuada. 
+            Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. 
+            Etiam dictum tincidunt diam. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit 
+            mauris vel metus. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Morbi imperdiet, mauris ac auctor dictum, nisl 
+            ligula egestas nulla, et sollicitudin sem purus in lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, 
+            per inceptos hymenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris suscipit, 
+            ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Ut enim ad minim veniam, quis 
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Pellentesque arcu. Duis ante orci, molestie vitae 
+            vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi.</p>
+       </article>
+    </article>
+</div>
+
+
+
+
+<!-- TAB SWITCHING LOGIC -->
+<script>
+   window.onmousemove = function chooseInput(){
+      var url = window.location.hash;
+      console.log(url);
+      //document.getElementById(url).style.display = "";
+      $('div.selector').not(url).hide();
+      $('div.selector').filter(url).show();
+   }
+</script>
+<!-- TAB SWITCHING LOGIC -->
+
+
+</html>

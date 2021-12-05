@@ -1,0 +1,464 @@
+
+body {
+   background-color: #ffffff;
+   min-height: 100vh;
+   margin: 0 auto;
+}
+* { 
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+
+
+/*==================================================================== 
+ *  HEADER
+ */
+
+  div#wrapperHeader {
+   max-width: 100%;
+   height: 150px; /* height of the background image? */
+   background:url(images/header.png) repeat-x 0 0;
+   opacity: 0.6;
+   text-align:center;
+   position:relative;
+  }
+  
+  div#wrapperHeader div#header {
+   width:100%;
+   height:150px;
+   margin:0 auto;
+  }
+  
+  div#wrapperHeader div#header img {
+   width:100%; /* the width of the logo image */
+   height:100%; /* the height of the logo image */
+   margin:0 auto;
+  }
+
+ /* Centered text */
+ .centered {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   font:bolder;
+   font-size: 50px;
+   color: lightskyblue;
+   text-shadow: 3px 3px 2px darkblue;
+   transform: translate(-50%, -50%);
+ }
+
+
+
+/*==================================================================== 
+*  ABOVE TABLE
+*/
+
+ #myAboveTable {
+   border-collapse:separate; /* Collapse borders */
+   width: 100vw; /* Full-width */
+   height: 15px;
+   border: 1px solid navy; /* Add a grey border */
+   background-color: #d9e9f3; /* Add a grey border */
+   padding: 6px 20px 6px 40px; /* Add some padding */
+   font-size: 18px; /* Increase font-size */
+ }
+ 
+ #myAboveTable th, #myAboveTable td {
+   text-align: left; /* Left-align text */
+   color: navy;
+   padding: 5px; /* Add padding */
+   width: 33vw;  /* Change in case of adding columns */
+ }
+
+/*==================================================================== 
+ *  TABLE
+ */
+
+ #myInput {
+   background-image: url('assets/images/search_icon.png'); /* Add a search icon to input */
+   background-position: 10px 12px; /* Position the search icon */
+   background-repeat: no-repeat; /* Do not repeat the icon image */
+   width: 80%; /* Full-width */
+   font-size: 16px; /* Increase font-size */
+   padding: 12px 20px 12px 40px; /* Add some padding */
+   border: 1px solid grey; /* Add a grey border */
+   margin-bottom: 12px; /* Add some space below the input */
+ }
+ 
+ #myTable {
+   border-collapse:separate; /* Collapse borders */
+   width: 100%; /* Full-width */
+   height: 470px;
+   border: 1px solid navy; /* Add a grey border */
+   background-color: floralwhite;
+   padding: 12px 20px 12px 40px; /* Add some padding */
+   font-size: 15px; /* Increase font-size */
+ }
+ 
+ #myTable th, #myTable td {
+   text-align: left; /* Left-align text */
+   height: 20px;
+   padding: 12px; /* Add padding */
+   width: 30%;  /* Change in case of adding columns */
+   min-width: 30vw;
+ }
+ 
+ #myTable tr {
+   /* Add a bottom border to all table rows */
+   width: 100%;
+   border-bottom: 1px solid navy;
+ }
+
+ #myTable th:first-child, #myTable td:first-child {
+   /* Set every even row to this color */
+   min-width: 5vw;
+ }
+
+ #myTable tr:nth-child(odd) {
+   /* Set every even row to this color */
+   background-color: #f2f2f2;
+ }
+ 
+ #myTable tr.header, #myTable tr:hover {
+   /* Add a grey background color to the table header and on hover */
+   background-color: #d9e9f3;
+ }
+
+ .scrollContent {
+   display: table-caption;
+   margin: 0 auto;
+   width: 100%;
+   min-width: 100vw;
+   height: 470px;
+   overflow-y: auto;    /* Trigger vertical scroll    */
+   overflow-x: hidden;  /* Hide the horizontal scroll */
+   table-layout: fixed;
+   overflow: auto;
+   position: relative;
+}
+
+
+
+/*==================================================================== 
+ *  LOGIN + DROPDOWN
+ */
+ 
+ .navbar {
+    overflow: hidden;
+    background-color: navy;
+ }
+ 
+ .navbar a {
+    float: left;
+    font-size: 16px;
+    color: lightskyblue;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+ }
+ 
+ .dropdown {
+    float: left;
+    overflow: hidden;
+ }
+ 
+ .dropdown .dropbtn {
+    font-size: 16px;  
+    border: none;
+    outline: none;
+    color: lightskyblue;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+ }
+ 
+ .navbar a:hover, .dropdown:hover .dropbtn {
+    background-color: blue;
+ }
+ 
+ .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: navy;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+ }
+ 
+ .dropdown-content a {
+    float: none;
+    color: lightskyblue;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+ }
+ 
+ .dropdown-content a:hover {
+    background-color: blue;
+ }
+ 
+ .dropdown:hover .dropdown-content {
+    display: block;
+ }
+ * {box-sizing: border-box;}
+
+ /* Active/current link */
+ .navbar a.active {
+ background-color: #2196F3;
+ color: white;
+ }
+ /* Style the input container */
+ .navbar .login-container {
+ float: right;
+ }
+
+ /* Style the input field inside the navbar */
+ .navbar .login-container input[type=text] {
+ padding: 6px;
+ margin-top: 8px;
+ font-size: 17px;
+ border: none;
+ width: 100px; /* adjust as needed (as long as it doesn't break the topnav) */
+ }
+
+ /* Style the button inside the input container */
+ .navbar .login-container button {
+ float: right;
+ padding: 6px;
+ margin-top: 8px;
+ margin-right: 16px;
+ background: #ddd;
+ font-size: 17px;
+ border: none;
+ cursor: pointer;
+ }
+
+ .navbar .login-container button:hover {
+ background: #ccc;
+ }
+
+ /* Add responsiveness - On small screens, display the navbar vertically instead of horizontally */
+ @media screen and (max-width: 600px) {
+    .navbar .login-container {
+       float: none;
+    }
+    .navbar a, .navbar .login-container input[type=text], .navbar .login-container button {
+       float: none;
+       display: block;
+       text-align: left;
+       width: 100%;
+       margin: 0;
+       padding: 14px;
+    }
+    .navbar .login-container input[type=text] {
+       border: 1px solid #ccc;
+    }
+ }
+
+
+
+/*==================================================================== 
+ *  SEARCH
+ */
+ /* Style the input container */
+ .navbar .search-container {
+ position: absolute;
+ float: right;
+ width: 600px;
+ height: 32px;
+ left: 33%;
+ }
+
+ /* Style the input field inside the navbar */
+ .navbar .search-container input[type=text] {
+ padding: 6px;
+ margin-top: 8px;
+ font-size: 17px;
+ width: 600px;
+ height: 32px;
+ border: none;
+ }
+
+ /* Style the button inside the input container */
+ .navbar .search-container button {
+ float: right;
+ padding: 6px;
+ margin-top: 8px;
+ margin-right: 16px;
+ background: #ddd;
+ font-size: 17px;
+ border: none;
+ cursor: pointer;
+ }
+
+ .navbar .search-container button:hover {
+ background: #ccc;
+ }
+
+ /* Add responsiveness - On small screens, display the navbar vertically instead of horizontally */
+ @media screen and (max-width: 600px) {
+ .navbar .search-container {
+    float: none;
+ }
+ .navbar a, .navbar .search-container input[type=text], .navbar .search-container button {
+    float: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+ }
+ .navbar .search-container input[type=text] {
+    border: 1px solid #ccc;
+ }
+ }
+
+/*==================================================================== 
+ *  POPUP WINDOW
+ */
+ /* The Modal (background) */
+.modal {
+   display: none; /* Hidden by default */
+   position: fixed; /* Stay in place */
+   z-index: 1; /* Sit on top */
+   left: 0;
+   top: 0;
+   width: 100%; /* Full width */
+   height: 100%; /* Full height */
+   overflow: auto; /* Enable scroll if needed */
+   background-color: rgb(0,0,0); /* Fallback color */
+   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+ }
+ 
+ /* Modal Content/Box */
+ .modal-content {
+   background-color: #fefefe;
+   margin: 15% auto; /* 15% from the top and centered */
+   padding: 20px;
+   border: 1px solid #888;
+   width: 80%; /* Could be more or less, depending on screen size */
+ }
+ 
+ /* The Close Button */
+ .close {
+   color: #aaa;
+   float: right;
+   font-size: 28px;
+   font-weight: bold;
+ }
+ 
+ .close:hover,
+ .close:focus {
+   color: black;
+   text-decoration: none;
+   cursor: pointer;
+ }
+
+
+
+
+ /* The Modal (background) */
+.modal {
+   display: none; /* Hidden by default */
+   position: fixed; /* Stay in place */
+   z-index: 1; /* Sit on top */
+   padding-top: 100px; /* Location of the box */
+   left: 0;
+   top: 0;
+   width: 100%; /* Full width */
+   height: 100%; /* Full height */
+   overflow: auto; /* Enable scroll if needed */
+   background-color: rgb(0,0,0); /* Fallback color */
+   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+ }
+ 
+ /* Modal Content */
+ .modal-content {
+   position: relative;
+   background-color: #fefefe;
+   margin: auto;
+   padding: 0;
+   border: 1px solid floralwhite;
+   width: 80%;
+   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+   -webkit-animation-name: animatetop;
+   -webkit-animation-duration: 0.4s;
+   animation-name: animatetop;
+   animation-duration: 0.4s
+ }
+ 
+ /* Add Animation */
+ @-webkit-keyframes animatetop {
+   from {top:-300px; opacity:0} 
+   to {top:0; opacity:1}
+ }
+ 
+ @keyframes animatetop {
+   from {top:-300px; opacity:0}
+   to {top:0; opacity:1}
+ }
+ 
+ /* The Close Button */
+ .close {
+   color: white;
+   float: right;
+   font-size: 28px;
+   font-weight: bold;
+ }
+ 
+ .close:hover,
+ .close:focus {
+   color: #000;
+   text-decoration: none;
+   cursor: pointer;
+ }
+ 
+ .modal-header {
+   padding: 2px 16px;
+   background-color: navy;
+   color: lightskyblue;
+ }
+ 
+ .modal-body {
+   padding: 2px 16px;
+   height: 315px;
+ }
+ 
+ .modal-footer {
+   padding: 2px 16px;
+   background-color: navy;
+   color: lightskyblue;
+ }
+
+ div.left {
+   float: left;
+   clear: both;
+}
+ div.right {
+   float: right;
+   clear: both;
+}
+
+.div-table {
+   border-collapse:separate;
+   display: table;         
+   width: auto;         
+   background-color: floralwhite;         
+   border: 1px solid navy;         
+   border-spacing: 5px;
+ }
+ .div-table-row {
+   display: table-row;
+   width: auto;
+   clear: both;
+ }
+ .div-table-col {
+   float: left; /* fix for  buggy browsers */
+   display: table-column;         
+   width: 190px;         
+   background-color: rgb(233, 230, 225);  
+ }

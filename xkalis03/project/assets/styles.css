@@ -1,0 +1,504 @@
+/**
+ *  styles.css
+ *
+ *  pro globální zajištění kontroly layoutu a vzhledu jednotlivých HTML bloků a shrnutí těchto stylů do jednoho souboru
+ *
+ *  AUTOR:  Vojtěch Kališ (xkalis03@stud.fit.vutbr.cz)
+ *
+**/
+
+
+
+/*==================================================================== 
+ *  BODY
+ */
+
+   body {
+      background-color: #ffffff;
+      min-height: 100vh;
+      margin: 0 auto;
+   }
+   * { 
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+   }
+
+
+/*==================================================================== 
+ *  HEADER
+ */
+
+   div#wrapperHeader {
+      max-width: 100%;
+      height: 150px;
+      background:url(images/header.png) repeat-x 0 0;
+      opacity: 0.6;
+      text-align:center;
+      position:relative;
+   }
+   
+   div#wrapperHeader div#header {
+      width:100%;
+      height:150px;
+      margin:0 auto;
+   }
+   
+   div#wrapperHeader div#header img {
+      width:100%;
+      height:100%;
+      margin:0 auto;
+   }
+
+   /* Centrování textu */
+   .centered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font:bolder;
+      font-size: 50px;
+      color: lightskyblue;
+      text-shadow: 3px 3px 2px darkblue;
+      transform: translate(-50%, -50%);
+   }
+   /* Simple centrování */
+   .center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
+
+
+
+/*==================================================================== 
+*  ABOVE TABLE
+*/
+
+   #myAboveTable {
+      border-collapse:separate;
+      width: 100vw;
+      height: 15px;
+      border: 1px solid navy;
+      background-color: #d9e9f3;
+      padding: 6px 20px 6px 40px;
+      font-size: 18px;
+   }
+   
+   #myAboveTable th, #myAboveTable td {
+      text-align: left;
+      color: navy;
+      padding: 5px;
+      width: 33vw;
+   }
+
+
+
+/*==================================================================== 
+ *  TABLE
+ */
+
+   #myInput {
+      background-image: url('assets/images/search_icon.png');
+      background-position: 10px 12px;
+      background-repeat: no-repeat;
+      width: 80%;
+      font-size: 16px;
+      padding: 12px 20px 12px 40px;
+      border: 1px solid grey;
+      margin-bottom: 12px;
+   }
+   
+   #myTable {
+      border-collapse:separate;
+      width: 100%;
+      height: 470px;
+      border: 1px solid navy;
+      background-color: floralwhite;
+      padding: 12px 20px 12px 40px;
+      font-size: 15px;
+   }
+   
+   #myTable th, #myTable td {
+      text-align: left;
+      height: 20px;
+      padding: 12px;
+      width: 30%;
+      min-width: 30vw;
+   }
+   
+   #myTable tr {
+      width: 100%;
+      border-bottom: 1px solid navy;
+   }
+
+   #myTable th:first-child, #myTable td:first-child {
+      min-width: 5vw;
+   }
+
+   #myTable tr:nth-child(odd) {
+      background-color: #f2f2f2;
+   }
+   
+   #myTable tr.header, #myTable tr:hover {
+      background-color: #d9e9f3;
+   }
+
+   .scrollContent {
+      display: table-caption;
+      margin: 0 auto;
+      width: 100%;
+      min-width: 100vw;
+      height: 470px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      table-layout: fixed;
+      overflow: auto;
+      position: relative;
+   }
+
+
+
+/*==================================================================== 
+ *  NAVBAR + LOGIN + DROPDOWN
+ */
+ 
+   .navbar {
+      overflow: hidden;
+      background-color: navy;
+   }
+   
+   .navbar a {
+      float: left;
+      font-size: 16px;
+      color: lightskyblue;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+   }
+   
+   .dropdown {
+      float: left;
+      overflow: hidden;
+   }
+   
+   .dropdown .dropbtn {
+      font-size: 16px;  
+      border: none;
+      outline: none;
+      color: lightskyblue;
+      padding: 14px 16px;
+      background-color: inherit;
+      font-family: inherit;
+      margin: 0;
+   }
+   
+   .navbar a:hover, .dropdown:hover .dropbtn {
+      background-color: blue;
+   }
+   
+   .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: navy;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+   }
+   
+   .dropdown-content a {
+      float: none;
+      color: lightskyblue;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+   }
+   
+   .dropdown-content a:hover {
+      background-color: blue;
+   }
+   
+   .dropdown:hover .dropdown-content {
+      display: block;
+   }
+   * {box-sizing: border-box;}
+
+   .navbar a.active {
+      background-color: #2196F3;
+      color: white;
+   }
+
+   .navbar .login-container {
+      float: right;
+   }
+
+   .navbar .login-container input[type=text] {
+      padding: 6px;
+      margin-top: 8px;
+      font-size: 17px;
+      border: none;
+      width: 100px;
+   }
+
+   .navbar .login-container button {
+      float: right;
+      padding: 6px;
+      margin-top: 8px;
+      margin-right: 16px;
+      background: #ddd;
+      font-size: 17px;
+      border: none;
+      cursor: pointer;
+   }
+
+   .navbar .login-container button:hover {
+      background: #ccc;
+   }
+
+   @media screen and (max-width: 600px) {
+      .navbar .login-container {
+         float: none;
+      }
+      .navbar a, .navbar .login-container input[type=text], .navbar .login-container button {
+         float: none;
+         display: block;
+         text-align: left;
+         width: 100%;
+         margin: 0;
+         padding: 14px;
+      }
+      .navbar .login-container input[type=text] {
+         border: 1px solid #ccc;
+      }
+   }
+
+
+
+/*==================================================================== 
+ *  SEARCH
+ */
+
+   .navbar .search-container {
+      position: absolute;
+      float: right;
+      width: 600px;
+      height: 32px;
+      left: 33%;
+   }
+
+   .navbar .search-container input[type=text] {
+      padding: 6px;
+      margin-top: 8px;
+      font-size: 17px;
+      width: 600px;
+      height: 32px;
+      border: none;
+   }
+
+   .navbar .search-container button {
+      float: right;
+      padding: 6px;
+      margin-top: 8px;
+      margin-right: 16px;
+      background: #ddd;
+      font-size: 17px;
+      border: none;
+      cursor: pointer;
+   }
+
+   .navbar .search-container button:hover {
+      background: #ccc;
+   }
+
+   @media screen and (max-width: 600px) {
+      .navbar .search-container {
+         float: none;
+      }
+      .navbar a, .navbar .search-container input[type=text], .navbar .search-container button {
+         float: none;
+         display: block;
+         text-align: left;
+         width: 100%;
+         margin: 0;
+         padding: 14px;
+      }
+      .navbar .search-container input[type=text] {
+         border: 1px solid #ccc;
+      }
+   }
+
+
+
+/*==================================================================== 
+ *  POPUP WINDOW
+ */
+
+   .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);
+   }
+   
+   .modal-content {
+      position: relative;
+      background-color: #fefefe;
+      margin: auto;
+      padding: 0;
+      border: 1px solid floralwhite;
+      width: 80%;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+      -webkit-animation-name: animatetop;
+      -webkit-animation-duration: 0.4s;
+      animation-name: animatetop;
+      animation-duration: 0.4s
+   }
+   
+   @-webkit-keyframes animatetop {
+      from {top:-300px; opacity:0} 
+      to {top:0; opacity:1}
+   }
+   
+   @keyframes animatetop {
+      from {top:-300px; opacity:0}
+      to {top:0; opacity:1}
+   }
+   
+   .close {
+      color: white;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+   }
+   
+   .close:hover,
+   .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+   }
+   
+   .modal-header {
+      padding: 2px 16px;
+      background-color: navy;
+      color: lightskyblue;
+   }
+   
+   .modal-body {
+      padding: 2px 16px;
+      height: 500px;
+   }
+   
+   .modal-footer {
+      padding: 2px 16px;
+      background-color: navy;
+      color: lightskyblue;
+   }
+
+
+
+/*==================================================================== 
+ *  TIME SCHEDULE INSIDE MODAL
+ */
+
+   div.left {
+      float: left;
+      clear: both;
+   }
+   div.right {
+      float: right;
+      clear: both;
+   }
+
+   .div-table {
+      border-collapse:separate;
+      display: table;         
+      width: auto;         
+      background-color: floralwhite;         
+      border: 1px solid navy;         
+      border-spacing: 5px;
+   }
+   .div-table-row {
+      display: table-row;
+      width: auto;
+      clear: both;
+   }
+   .div-table-col {
+      float: left;
+      display: table-column;         
+      width: 190px;         
+      background-color: rgb(233, 230, 225);  
+   }
+
+
+
+/*==================================================================== 
+ *  TABLE INSIDE MODAL
+ */
+
+   .divTable{
+      display: table;
+      width: 100%;
+      margin-bottom: 1cm;
+      font-size: 17px;
+      font-family: serif;
+   }
+   .divTableRow {
+      display: table-row;
+   }
+   .divTableHeading {
+      background-color: #EEE;
+      display: table-header-group;
+   }
+   .divTableCell, .divTableHead {
+      border: none;
+      display: table-cell;
+      padding: 25px 0px 25px 20px;
+   }
+   .divTableHeading {
+      background-color: #EEE;
+      display: table-header-group;
+      font-weight: bold;
+   }
+   .divTableFoot {
+      background-color: #EEE;
+      display: table-footer-group;
+      font-weight: bold;
+   }
+   .divTableBody {
+      display: table-row-group;
+   }
+
+
+
+/*==================================================================== 
+ *  BASIC PAGE
+ */
+
+   .page-basic {
+      margin: 0;
+      padding: 5px;
+      background-color: lightgray;
+    }
+    
+    .page-basic > h1, .basic {
+      margin: 10px;
+      padding: 5px;
+    }
+    
+    .basic {
+      background: white;
+    }
+    
+    .basic > h2, p {
+      margin: 4px;
+      font-size: 90%;
+    }
