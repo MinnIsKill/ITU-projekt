@@ -44,10 +44,12 @@ def sTab():
 @app.route("/getStudent/<student_id>",methods=["GET","POST"])
 def getStudent(student_id):
     try:
-        person = Person.query.order_by(Person.id).filter_by(id = student_id).first()
-        return "<h1>{} {}<h2>".format(person.name,person.surname)
+        person_db = Person.query.order_by(Person.id).filter_by(id = student_id).first()
+        person = {"ID":str(person_db.id),"NAME":person_db.name,"SURNAME":person_db.surname,"INSTRUMENT":person_db.instrument, "BIRTHDATE":person_db.birthdate,"PHONE":person_db.phone,"PHONEPARENT":person_db.phone_parent,"EMAIL":person_db.email,"EMAILPARENT":person_db.email_parent}
+        return jsonify(person);
     except:
-        return "DATABASE EROR"
+        person = {"ID":"","NAME":"DATABASE ERROR","SURNAME":"","INSTRUMENT":"", "BIRTHDATE":"","PHONE":"","PHONEPARENT":"","EMAIL":"","EMAILPARENT":""}
+        return jsonify(person);
 
 @app.route("/studentPage/<student_id>",methods=["GET","POST"])
 def studentPage(student_id):
@@ -64,11 +66,32 @@ def studentPage(student_id):
     else:
         try:
             person = Person.query.order_by(Person.id).filter_by(id = student_id).first()
-            print(person.serialize())
             return render_template("user_info.html", i = person)
         except:
             return "DATABASE EROR"
 
+
+@app.route("/setStudent/<student_id>",methods=["GET","POST"])
+def setStudent(student_id):
+    if request.method == "POST":
+        try:
+            rec = request.get_json(force=True)
+            print(rec);
+            person = Person.query.order_by(Person.id).filter_by(id = student_id).first()
+            person.name = rec["NAME"]
+            person.surname = rec["SURNAME"]
+            person.instrument = rec["INSTRUMENT"]
+            person.birthdate = rec["BIRTHDATE"]
+            person.phone = rec["PHONE"]
+            person.phone_parent = rec["PHONEPARENT"]
+            person.email = rec["EMAIL"]
+            person.email_parent = rec["EMAILPARENT"] 
+           
+            db.session.commit()
+            return jsonify({"success": True})
+        except:
+            return "DATABASE EROR"
+        
 
 @app.route("/dumpStudents",methods=["GET","POST"])
 @cross_origin()
@@ -96,7 +119,6 @@ def studentDelete(student_id):
 def addStudent():
     if request.method == "POST":
         rec = request.get_json(force=True)
-        print(rec);
         name = rec["name"]
         surname = rec["surname"]
         instrument = rec["instrument"]
