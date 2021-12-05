@@ -90,3 +90,27 @@ def studentDelete(student_id):
         return jsonify({"success": True})
     except:
         return "DATABASE EROR"
+
+
+@app.route("/addStudent",methods=["GET","POST"])
+def addStudent():
+    if request.method == "POST":
+        rec = request.get_json(force=True)
+        print(rec);
+        name = rec["name"]
+        surname = rec["surname"]
+        instrument = rec["instrument"]
+        birthdate = rec["birthdate"]
+        phone = rec["phone"]
+        phone_parent = rec["phone_parent"]
+        email = rec["email"]
+        email_parent = rec["email_parent"] 
+        new_person = Person(name = name, surname = surname, instrument=instrument,birthdate=birthdate,phone=phone,phone_parent=phone_parent,email=email,email_parent=email_parent)
+        try:
+        
+            db.session.add(new_person)
+            db.session.commit()
+            
+            return jsonify({"success": True})
+        except:
+            return "DATABASE ERROR"

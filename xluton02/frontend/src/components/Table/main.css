@@ -3,6 +3,9 @@
     font-size: 20px;
 }
 
+.searchBar{
+    white-space: nowrap;
+}
 
 .inputBox{
     margin: 10px;
@@ -33,10 +36,12 @@ tr,
 td{
     font-size: 15px;
     white-space: nowrap;
+    text-align: left;
     width: 20%;
     overflow-wrap: break-word;
-    padding: 0.5rem;
-
+    padding-left: 1rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
 }
 
 
